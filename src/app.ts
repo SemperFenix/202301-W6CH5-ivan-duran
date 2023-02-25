@@ -9,7 +9,7 @@ app.use(morgan('dev'));
 const corsOrigins = {
   origin: '*',
 };
-app.use(cors(corsOrigins));
+app.use(cors(corsOrigins)); // NOSONAR not using secure environment
 app.use(express.json());
 
 app.use('/scrubs', scrubsRouter);

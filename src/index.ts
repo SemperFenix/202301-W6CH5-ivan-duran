@@ -3,10 +3,10 @@ import { app } from './app.js';
 
 const PORT = process.env.PORT || 4251;
 
-const server = http.createServer(app);
+export const server = http.createServer(app);
 
 server.on('error', () => {
-  console.log('Eres idiota');
+  console.log('Error');
 });
 
 server.on('listening', () => {

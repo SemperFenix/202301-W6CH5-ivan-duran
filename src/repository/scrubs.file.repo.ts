@@ -11,7 +11,8 @@ export type Scrub = {
 export interface ScrubsRepoStructure {
   read(): Promise<Scrub[]>;
   readOne(id: Scrub['id']): Promise<Scrub>;
-  write(info: Scrub): Promise<string>;
+  write(info: Scrub): Promise<void>;
+  update(info: Scrub): Promise<void>;
 }
 
 const file = 'data/scrubs.json';
@@ -36,15 +37,14 @@ export class ScrubsFileRepo implements ScrubsRepoStructure {
     info.id = newID + 1;
     const finalData = JSON.stringify([...parsedData, info]);
     await fs.writeFile(file, finalData, 'utf-8');
-    return 'Write successful';
   }
 
-  // Prueba de concepto del método update
-  // async update(info: Scrub) {
-  //   const data = await fs.readFile(file, 'utf-8');
-  //   const parsedData: Scrub[] = JSON.parse(data);
-  //   const finalData = JSON.stringify(
-  //     parsedData.map((item) => (item.id === info.id ? info : item))
-  //   );
-  // }
+  async update(info: Scrub) {
+    const data = await fs.readFile(file, 'utf-8');
+    const parsedData: Scrub[] = JSON.parse(data);
+    const finalData = JSON.stringify(
+      parsedData.map((item) => (item.id === info.id ? info : item))
+    );
+    await fs.writeFile(file, finalData, 'utf-8');
+  }
 }

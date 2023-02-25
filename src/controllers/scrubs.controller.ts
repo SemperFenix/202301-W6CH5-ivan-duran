@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ScrubsRepoStructure } from '../repository/scrubs.file.repo.js';
+import { Scrub, ScrubsRepoStructure } from '../repository/scrubs.file.repo.js';
 
 export class ScrubsController {
   // eslint-disable-next-line no-useless-constructor, no-unused-vars
@@ -21,14 +21,17 @@ export class ScrubsController {
 
   create(req: Request, resp: Response) {
     console.log(req.body);
-    this.repo.write(req.body).then((data) => console.log(data));
+    this.repo.write(req.body).then();
     resp.send('<h1>Write Successful</h1>');
   }
 
-  // Prueba de concepto del método update
-  // async update(req: Request, resp: Response) {
-  //   const updateInfo = req.body
-  //   const data = await this.repo.read()
-
-  // }
+  async update(req: Request, resp: Response) {
+    const updateInfo = req.body as Partial<Scrub>;
+    const dataToUpdate = await this.repo.readOne(Number(req.params.id));
+    const updatedItem = Object.assign(dataToUpdate, updateInfo);
+    console.log(updatedItem);
+    await this.repo.update(updatedItem);
+    console.log('Data updated: ' + updatedItem);
+    resp.send('<h1>Update Sucessful<h2>');
+  }
 }

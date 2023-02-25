@@ -9,6 +9,4 @@ const controller = new ScrubsController(repo);
 scrubsRouter.get('/', controller.getAll.bind(controller));
 scrubsRouter.get('/:id', controller.get.bind(controller));
 scrubsRouter.post('/', controller.create.bind(controller));
-
-// Prueba de concepto del método update
-// scrubsRouter.patch('/:id', controller.update.bind(controller));
+scrubsRouter.patch('/:id', controller.update.bind(controller));

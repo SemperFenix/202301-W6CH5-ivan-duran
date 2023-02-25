@@ -1,5 +1,14 @@
-# Week 6 Challenge 5
+# Week 6 Challenge 5 - backend
 
-Crear un backend utilizando express que permita realizar un CRUD completo.
+Crear un servidor backend utilizando express que permita realizar un CRUD completo.
 
-Como parte extra, crear un front con Redux capaz de utilizar el back.
+En la creación del servidor vamos a utilizar las capas de App -> Router -> Controller -> Repo
+
+- Tareas realizadas:
+        - [x] Permitir método GET
+        - [x] Permitir método POST a través de Postman
+        - [x] Permitir método PATCH a través de Postman
+        - [x] Permitir método DELETE a través de Postman
+
+- Tareas a realizar:
+        - [ ] Integración con frontend.

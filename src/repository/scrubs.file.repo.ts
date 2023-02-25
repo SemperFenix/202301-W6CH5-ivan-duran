@@ -2,6 +2,7 @@
 import fs from 'fs/promises';
 
 export type Scrub = {
+  id: number;
   name: string;
   occupattion: string;
   personality: string;
@@ -9,23 +10,41 @@ export type Scrub = {
 
 export interface ScrubsRepoStructure {
   read(): Promise<Scrub[]>;
-  write(info: Scrub): Promise<string>;
+  readOne(id: Scrub['id']): Promise<Scrub>;
+  write(info: Scrub): Promise<void>;
+  update(info: Scrub): Promise<void>;
 }
 
 const file = 'data/scrubs.json';
 
-export class ScrubsFileRepo {
+export class ScrubsFileRepo implements ScrubsRepoStructure {
   read() {
     return fs
-      .readFile(file, { encoding: 'utf-8' })
+      .readFile(file, 'utf-8')
       .then((data) => JSON.parse(data) as Scrub[]);
   }
 
-  async write(info: Scrub) {
-    const data = await fs.readFile(file, { encoding: 'utf-8' });
+  async readOne(id: Scrub['id']) {
+    const data = await fs.readFile(file, 'utf-8');
     const parsedData: Scrub[] = JSON.parse(data);
+    return parsedData.filter((item) => item.id === id)[0];
+  }
+
+  async write(info: Scrub) {
+    const data = await fs.readFile(file, 'utf-8');
+    const parsedData: Scrub[] = JSON.parse(data);
+    const newID: number = Math.max(...parsedData.map((item) => item.id));
+    info.id = newID + 1;
     const finalData = JSON.stringify([...parsedData, info]);
-    await fs.writeFile(file, finalData, { encoding: 'utf-8' });
-    return 'Write successful';
+    await fs.writeFile(file, finalData, 'utf-8');
+  }
+
+  async update(info: Scrub) {
+    const data = await fs.readFile(file, 'utf-8');
+    const parsedData: Scrub[] = JSON.parse(data);
+    const finalData = JSON.stringify(
+      parsedData.map((item) => (item.id === info.id ? info : item))
+    );
+    await fs.writeFile(file, finalData, 'utf-8');
   }
 }

@@ -1,28 +1,32 @@
 [
   {
+    "id": 1,
     "name": "John D. Dorian",
     "occupattion": "doctor",
     "personality": "hugger"
   },
   {
+    "id": 2,
     "name": "Percyval U. Cox",
     "occupattion": "doctor",
     "personality": "absolute truth"
   },
   {
-    "name": "Carla E. Espinoza",
-    "ocuppation": "nurse",
-    "personality": "tender"
-  },
-  { "name": "Elliot Reed", "occupattion": "doctor", "personality": "nuts" },
-  {
-    "name": "Christopher D. Turk",
+    "name": "Rorbert Kelzo",
     "occupattion": "doctor",
-    "personality": "blackish"
+    "personality": "idiot",
+    "id": 3
   },
   {
-    "name": "Christopher D. Turk",
+    "name": "ROBERT Kelzo",
     "occupattion": "doctor",
-    "personality": "blackish"
+    "personality": "bossy",
+    "id": 4
+  },
+  {
+    "name": "Rorbert Kelzo",
+    "occupattion": "doctor",
+    "personality": "idiot",
+    "id": 5
   }
 ]

@@ -25,6 +25,8 @@ export class ScrubsController {
     resp.send('<h1>Write Successful</h1>');
   }
 
+  // Los métodos update y delete están hechos con async para utilizar ambas formas de resolver promesas
+
   async update(req: Request, resp: Response) {
     const updateInfo = req.body as Partial<Scrub>;
     const dataToUpdate = await this.repo.readOne(Number(req.params.id));
@@ -33,5 +35,10 @@ export class ScrubsController {
     await this.repo.update(updatedItem);
     console.log('Data updated: ' + updatedItem);
     resp.send('<h1>Update Sucessful<h2>');
+  }
+
+  async delete(req: Request, resp: Response) {
+    await this.repo.delete(Number(req.params.id))
+    resp.send(`<h1>Delete of item with id: ${req.params.id} successful`)
   }
 }

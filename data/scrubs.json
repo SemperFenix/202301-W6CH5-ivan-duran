@@ -1,1 +1,32 @@
-[{"id":1,"name":"John D. Dorian","occupattion":"doctor","personality":"hugger"},{"id":2,"name":"Percyval U. Cox","occupattion":"doctor","personality":"absolute truth"},{"name":"Rorbert Kelzo","occupattion":"doctor","personality":"idiot","id":3},{"name":"ROBERT Kelzo","occupattion":"doctor","personality":"bossy","id":4},{"name":"Rorbert Kelzo","occupattion":"doctor","personality":"idiot","id":5}]
+[
+  {
+    "id": 1,
+    "name": "John D. Dorian",
+    "occupattion": "doctor",
+    "personality": "hugger"
+  },
+  {
+    "id": 2,
+    "name": "Percyval U. Cox",
+    "occupattion": "doctor",
+    "personality": "absolute truth"
+  },
+  {
+    "name": "Rorbert Kelzo",
+    "occupattion": "doctor",
+    "personality": "idiot",
+    "id": 3
+  },
+  {
+    "name": "ROBERT Kelzo",
+    "occupattion": "doctor",
+    "personality": "bossy",
+    "id": 4
+  },
+  {
+    "name": "Rorbert Kelzo",
+    "occupattion": "doctor",
+    "personality": "idiot",
+    "id": 5
+  }
+]

@@ -38,7 +38,7 @@ export class ScrubsController {
   }
 
   async delete(req: Request, resp: Response) {
-    await this.repo.delete(Number(req.params.id))
-    resp.send(`<h1>Delete of item with id: ${req.params.id} successful`)
+    await this.repo.delete(Number(req.params.id));
+    resp.send(`<h1>Delete of item with id: ${req.params.id} successful`);
   }
 }

@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import fs from 'fs/promises';
+import { server } from '..';
 
 export type Scrub = {
   id: number;
@@ -19,17 +20,18 @@ export interface ScrubsRepoStructure {
 const file = 'data/scrubs.json';
 
 export class ScrubsFileRepo implements ScrubsRepoStructure {
-  // El método read está hecho con then para utilizar los dos tipos de estructura de resolución de promesas.
+  // Los métodos read y readOne están hechos con then para utilizar los dos tipos de estructura de resolución de promesas.
   read() {
     return fs
       .readFile(file, 'utf-8')
       .then((data) => JSON.parse(data) as Scrub[]);
   }
 
-  async readOne(id: Scrub['id']) {
-    const data = await fs.readFile(file, 'utf-8');
-    const parsedData: Scrub[] = JSON.parse(data);
-    return parsedData.filter((item) => item.id === id)[0];
+  readOne(id: Scrub['id']) {
+    return fs.readFile(file, 'utf-8').then((data) => {
+      const parsedData: Scrub[] = JSON.parse(data);
+      return parsedData.filter((item) => item.id === id)[0] as Scrub;
+    });
   }
 
   async write(info: Scrub) {

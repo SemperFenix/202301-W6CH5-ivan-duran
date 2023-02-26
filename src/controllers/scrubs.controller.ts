@@ -30,7 +30,7 @@ export class ScrubsController {
   async update(req: Request, resp: Response) {
     const updateInfo = req.body as Partial<Scrub>;
     const dataToUpdate = await this.repo.readOne(Number(req.params.id));
-    const updatedItem = Object.assign(dataToUpdate, updateInfo);
+    const updatedItem = { ...dataToUpdate, ...updateInfo };
     console.log(updatedItem);
     await this.repo.update(updatedItem);
     console.log('Data updated: ' + updatedItem);

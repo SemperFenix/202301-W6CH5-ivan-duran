@@ -1,65 +1,65 @@
-/* eslint-disable no-unused-vars */
 import fs from 'fs/promises';
-import { server } from '..';
-
-export type Scrub = {
-  id: number;
-  img: string;
-  name: string;
-  occupattion: string;
-  personality: string;
-  extend_perso: string;
-};
-
-export interface ScrubsRepoStructure {
-  read(): Promise<Scrub[]>;
-  readOne(id: Scrub['id']): Promise<Scrub>;
-  write(info: Scrub): Promise<void>;
-  update(info: Scrub): Promise<void>;
-  delete(info: Scrub['id']): Promise<void>;
-}
+import { Scrub } from '../entities/scrub.models';
+import { Repo } from './repo.interface';
 
 const file = 'data/scrubs.json';
 
-export class ScrubsFileRepo implements ScrubsRepoStructure {
-  // Los métodos read y readOne están hechos con then para utilizar los dos tipos de estructura de resolución de promesas.
-  read() {
-    return fs
-      .readFile(file, 'utf-8')
-      .then((data) => JSON.parse(data) as Scrub[]);
+export class ScrubsFileRepo implements Repo<Scrub> {
+  async query() {
+    const data = await fs.readFile(file, 'utf-8');
+    return JSON.parse(data);
   }
 
-  readOne(id: Scrub['id']) {
-    return fs.readFile(file, 'utf-8').then((data) => {
-      const parsedData: Scrub[] = JSON.parse(data);
-      return parsedData.filter((item) => item.id === id)[0] as Scrub;
-    });
-  }
-
-  async write(info: Scrub) {
+  async queryById(id: Scrub['id']): Promise<Scrub> {
     const data = await fs.readFile(file, 'utf-8');
     const parsedData: Scrub[] = JSON.parse(data);
-    const newID: number = Math.max(...parsedData.map((item) => item.id));
-    info.id = newID + 1;
+    const finalData = parsedData.find((item) => item.id === id);
+    if (!finalData) throw new Error('Id not found');
+    return finalData;
+  }
+
+  async create(info: Partial<Scrub>): Promise<Scrub> {
+    const data = await fs.readFile(file, 'utf-8');
+    const parsedData: Scrub[] = JSON.parse(data);
+    info.id = Math.max(...parsedData.map((item) => item.id)) + 1;
+    if (isNaN(info.id)) info.id = 1;
     const finalData = JSON.stringify([...parsedData, info]);
     await fs.writeFile(file, finalData, 'utf-8');
+    await fs.readFile(file, 'utf-8');
+    // Esto falla, pero no lo vamos a resolver de momento porque en BBDD no tendremos este problema. Lo resolvemos con aserción de tipo
+    return info as Scrub;
   }
 
-  async update(info: Scrub) {
+  async update(info: Scrub): Promise<Scrub> {
+    if (!info.id) throw new Error('Not valid data');
     const data = await fs.readFile(file, 'utf-8');
+    console.log(data);
     const parsedData: Scrub[] = JSON.parse(data);
+    console.log(parsedData);
+    let updatedItem: Scrub = {} as Scrub;
+
     const finalData = JSON.stringify(
-      parsedData.map((item) => (item.id === info.id ? info : item))
+      parsedData.map((item) => {
+        if (item.id === info.id) {
+          updatedItem = { ...item, ...info };
+          return updatedItem;
+        }
+
+        return item;
+      })
     );
+
     await fs.writeFile(file, finalData, 'utf-8');
+
+    return updatedItem;
   }
 
-  async delete(id: Scrub['id']) {
+  async destroy(id: Scrub['id']) {
     const data = await fs.readFile(file, 'utf-8');
     const parsedData: Scrub[] = JSON.parse(data);
-    const finalData = JSON.stringify(
-      parsedData.filter((item) => item.id !== id)
-    );
+    const index = parsedData.findIndex((item) => item.id === id);
+    if (index === -1) throw new Error('Id not found');
+    const finalData = JSON.stringify(parsedData.slice(index));
     await fs.writeFile(file, finalData, 'utf-8');
   }
 }

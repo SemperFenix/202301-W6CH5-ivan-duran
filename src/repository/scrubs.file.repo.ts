@@ -59,7 +59,8 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     const parsedData: Scrub[] = JSON.parse(data);
     const index = parsedData.findIndex((item) => item.id === id);
     if (index === -1) throw new Error('Id not found');
-    const finalData = JSON.stringify(parsedData.slice(index));
+    parsedData.splice(index, 1);
+    const finalData = JSON.stringify(parsedData);
     await fs.writeFile(file, finalData, 'utf-8');
   }
 }

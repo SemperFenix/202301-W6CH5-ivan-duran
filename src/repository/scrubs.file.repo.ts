@@ -33,7 +33,9 @@ export class ScrubsFileRepo implements Repo<Scrub> {
   async update(info: Scrub): Promise<Scrub> {
     if (!info.id) throw new Error('Not valid data');
     const data = await fs.readFile(file, 'utf-8');
+    console.log(data);
     const parsedData: Scrub[] = JSON.parse(data);
+    console.log(parsedData);
     let updatedItem: Scrub = {} as Scrub;
 
     const finalData = JSON.stringify(
@@ -46,7 +48,6 @@ export class ScrubsFileRepo implements Repo<Scrub> {
         return item;
       })
     );
-    if (!info.id) throw new Error('Not valid data');
 
     await fs.writeFile(file, finalData, 'utf-8');
 

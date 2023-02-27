@@ -88,7 +88,7 @@ describe('Given the ScrubsFileRepo', () => {
     test('Then it should call readFile and writeFile', async () => {
       const value = [{ id: 5, name: 'Test' }];
       (fs.readFile as jest.Mock).mockResolvedValue(JSON.stringify(value));
-      const result = await repo.destroy(5);
+      await repo.destroy(5);
       expect(fs.readFile).toHaveBeenCalled();
       expect(fs.writeFile).toHaveBeenCalled();
     });

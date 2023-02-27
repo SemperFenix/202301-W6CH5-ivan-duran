@@ -1,44 +1,58 @@
-import { Request, Response } from 'express';
-import { Scrub, ScrubsRepoStructure } from '../repository/scrubs.file.repo.js';
+import { NextFunction, Request, Response } from 'express';
+import { Scrub } from '../entities/scrubs.models.js';
+import { Repo } from '../repository/repo.interface.js';
 
 export class ScrubsController {
   // eslint-disable-next-line no-useless-constructor, no-unused-vars
-  constructor(public repo: ScrubsRepoStructure) {}
+  constructor(public repo: Repo<Scrub>) {}
 
-  getAll(_req: Request, resp: Response) {
-    this.repo.read().then((data) => resp.json(data));
+  async getAll(_req: Request, resp: Response, next: NextFunction) {
+    try {
+      const data = await this.repo.query();
+      resp.json({ results: data });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  get(req: Request, resp: Response) {
-    this.repo
-      .readOne(Number(req.params.id))
-      .then((data) =>
-        data === undefined
-          ? resp.send('<p>No elements found with the requested id</p>')
-          : resp.json(data)
-      );
+  async get(req: Request, resp: Response, next: NextFunction) {
+    try {
+      const data = await this.repo.queryById(Number(req.params.id));
+
+      if (data === undefined) resp.json({ results: [] });
+      resp.json({ results: [data] });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  create(req: Request, resp: Response) {
-    console.log(req.body);
-    this.repo.write(req.body).then();
-    resp.send('<h1>Write Successful</h1>');
+  async post(req: Request, resp: Response, next: NextFunction) {
+    try {
+      console.log(req.body);
+      const data = await this.repo.create(req.body);
+      resp.json({ results: [data] });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  // Los métodos update y delete están hechos con async para utilizar ambas formas de resolver promesas
-
-  async update(req: Request, resp: Response) {
-    const updateInfo = req.body as Partial<Scrub>;
-    const dataToUpdate = await this.repo.readOne(Number(req.params.id));
-    const updatedItem = { ...dataToUpdate, ...updateInfo };
-    console.log(updatedItem);
-    await this.repo.update(updatedItem);
-    console.log('Data updated: ' + updatedItem);
-    resp.send('<h1>Update Sucessful<h2>');
+  async patch(req: Request, resp: Response, next: NextFunction) {
+    try {
+      req.body.id = req.params.id ? req.params.id : req.body.id;
+      const data = await this.repo.update(req.body);
+      resp.json({ results: [data] });
+    } catch (error) {
+      next(error);
+    }
   }
 
-  async delete(req: Request, resp: Response) {
-    await this.repo.delete(Number(req.params.id));
-    resp.send(`<h1>Delete of item with id: ${req.params.id} successful`);
+  async delete(req: Request, resp: Response, next: NextFunction) {
+    try {
+      await this.repo.destroy(Number(req.params.id));
+      console.log('Delete successful');
+      resp.json({ results: [] });
+    } catch (error) {
+      next(error);
+    }
   }
 }

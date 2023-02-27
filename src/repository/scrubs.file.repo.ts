@@ -1,6 +1,5 @@
-/* eslint-disable no-unused-vars */
 import fs from 'fs/promises';
-import { Scrub } from '../entities/scrubs.models';
+import { Scrub } from '../entities/scrub.models';
 import { Repo } from './repo.interface';
 
 const file = 'data/scrubs.json';
@@ -23,7 +22,7 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     const data = await fs.readFile(file, 'utf-8');
     const parsedData: Scrub[] = JSON.parse(data);
     info.id = Math.max(...parsedData.map((item) => item.id)) + 1;
-
+    if (isNaN(info.id)) info.id = 1;
     const finalData = JSON.stringify([...parsedData, info]);
     await fs.writeFile(file, finalData, 'utf-8');
     const resp = await fs.readFile(file, 'utf-8');

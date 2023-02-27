@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Scrub } from '../entities/scrubs.models.js';
+import { Scrub } from '../entities/scrub.models.js';
 import { Repo } from '../repository/repo.interface.js';
 
 export class ScrubsController {
@@ -15,11 +15,10 @@ export class ScrubsController {
     }
   }
 
-  async get(req: Request, resp: Response, next: NextFunction) {
+  async getById(req: Request, resp: Response, next: NextFunction) {
     try {
       const data = await this.repo.queryById(Number(req.params.id));
 
-      if (data === undefined) resp.json({ results: [] });
       resp.json({ results: [data] });
     } catch (error) {
       next(error);
@@ -38,7 +37,7 @@ export class ScrubsController {
 
   async patch(req: Request, resp: Response, next: NextFunction) {
     try {
-      req.body.id = req.params.id ? req.params.id : req.body.id;
+      req.body.id = req.body.id ? req.body.id : req.params.id;
       const data = await this.repo.update(req.body);
       resp.json({ results: [data] });
     } catch (error) {

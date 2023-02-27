@@ -25,7 +25,7 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     if (isNaN(info.id)) info.id = 1;
     const finalData = JSON.stringify([...parsedData, info]);
     await fs.writeFile(file, finalData, 'utf-8');
-    const resp = await fs.readFile(file, 'utf-8');
+    await fs.readFile(file, 'utf-8');
     // Esto falla, pero no lo vamos a resolver de momento porque en BBDD no tendremos este problema. Lo resolvemos con aserción de tipo
     return info as Scrub;
   }

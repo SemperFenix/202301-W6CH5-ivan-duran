@@ -4,5 +4,5 @@ export type Scrub = {
   name: string;
   occupattion: string;
   personality: string;
-  extend_perso: string;
+  extendPerso: string;
 };

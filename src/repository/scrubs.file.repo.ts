@@ -61,10 +61,5 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     if (index === -1) throw new Error('Id not found');
     const finalData = JSON.stringify(parsedData.slice(index));
     await fs.writeFile(file, finalData, 'utf-8');
-
-    // Este método no nos permite saber si no hemos borrado algo
-    // const finalData = JSON.stringify(
-    //   parsedData.filter((item) => item.id !== id)
-    // );
   }
 }

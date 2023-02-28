@@ -1,5 +1,5 @@
 export type Scrub = {
-  id: number;
+  id: string;
   img: string;
   name: string;
   occupattion: string;

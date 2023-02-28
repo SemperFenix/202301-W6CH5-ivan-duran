@@ -24,7 +24,7 @@ describe('Given the ScrubsFileRepo', () => {
 
   describe('When call the readOne method (ok)', () => {
     test('Then it should return the argument if it has a valid id', async () => {
-      (fs.readFile as jest.Mock).mockResolvedValue('[{"id":2}]');
+      (fs.readFile as jest.Mock).mockResolvedValue('[{"id":"2"}]');
 
       const result = await repo.queryById('2');
       expect(fs.readFile).toHaveBeenCalled();
@@ -50,7 +50,7 @@ describe('Given the ScrubsFileRepo', () => {
       expect(fs.readFile).toHaveBeenCalled();
       expect(fs.writeFile).toHaveBeenCalled();
 
-      expect(result).toEqual({ ...mockScrubPartial, id: '1' });
+      expect(result).toEqual({ ...mockScrubPartial });
     });
   });
 

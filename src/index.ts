@@ -14,7 +14,7 @@ dbConnect()
     server.listen(PORT);
     debug('Connected to DB: ', mongoose.connection.db.databaseName);
   })
-  .catch((error) => server.emit('error', error));
+  .catch((error) => debug(error));
 
 server.on('error', (error) => {
   debug('Server error: ', error.message);

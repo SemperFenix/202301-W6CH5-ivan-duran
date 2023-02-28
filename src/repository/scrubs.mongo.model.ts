@@ -21,6 +21,7 @@ const scrubSchema = new Schema<Scrub>({
     type: String,
     required: true,
   },
+
   extendPerso: {
     type: String,
     required: true,

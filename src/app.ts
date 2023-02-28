@@ -8,18 +8,16 @@ import createDebug from 'debug';
 const debug = createDebug('W6B:App');
 
 export const app = express();
+app.disable('x-powered-by');
 
 app.use(express.static('public'));
 
-app.disable('x-powered-by');
 app.use(morgan('dev'));
 const corsOrigins = {
   origin: '*',
 };
 app.use(cors(corsOrigins)); // NOSONAR not using secure environment
 app.use(express.json());
-
-app.use('/favicon', express.static('../public'));
 
 app.use('/scrubs', scrubsRouter);
 app.use('/', (_req, resp) => {
@@ -30,6 +28,7 @@ app.use('/', (_req, resp) => {
     },
   });
 });
+app.use('/favicon', express.static('../public'));
 
 app.use(
   (error: CustomError, _req: Request, resp: Response, _next: NextFunction) => {

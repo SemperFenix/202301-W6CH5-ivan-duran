@@ -6,7 +6,7 @@ export interface Repo<T> {
   create(_info: Partial<T>): Promise<T>;
   update(_info: Partial<T>): Promise<T>;
   // Delete puede llamarse erase o destroy
-  destroy(_info: string): Promise<void>;
+  destroy(_id: string): Promise<void>;
 }
 
 // En readOne y delete habr'ia que utilizar el T['id'], pero alarga el proceso y lo hacemos así de momento.

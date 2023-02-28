@@ -3,7 +3,7 @@ import { Scrub } from '../entities/scrub.model.js';
 import { Repo } from '../repository/repo.interface.js';
 import createDebug from 'debug';
 
-const debug = createDebug('W6B:controller');
+const debug = createDebug('W7B:controller');
 
 export class ScrubsController {
   // eslint-disable-next-line no-unused-vars

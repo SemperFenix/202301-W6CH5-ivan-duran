@@ -1,8 +1,8 @@
-import { Scrub } from '../entities/scrub.models';
+import { Scrub } from '../entities/scrub.model';
 
 export const mockScrubs: Scrub[] = [
   {
-    id: 1,
+    id: '1',
     name: 'John D. Dorian',
     occupattion: 'doctor',
     personality: 'hugger',
@@ -10,7 +10,7 @@ export const mockScrubs: Scrub[] = [
     img: '',
   },
   {
-    id: 2,
+    id: '2',
     name: 'Percyval U. Cox',
     occupattion: 'doctor',
     personality: 'absolute truth',
@@ -20,7 +20,7 @@ export const mockScrubs: Scrub[] = [
 ];
 
 export const mockScrub: Scrub = {
-  id: 5,
+  id: '5',
   name: 'Bob Kelzo',
   occupattion: 'doctor',
   personality: 'bossy',

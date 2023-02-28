@@ -1,5 +1,5 @@
 import fs from 'fs/promises';
-import { Scrub } from '../entities/scrub.models';
+import { Scrub } from '../entities/scrub.model';
 import { Repo } from './repo.interface';
 
 const file = 'data/scrubs.json';
@@ -21,8 +21,9 @@ export class ScrubsFileRepo implements Repo<Scrub> {
   async create(info: Partial<Scrub>): Promise<Scrub> {
     const data = await fs.readFile(file, 'utf-8');
     const parsedData: Scrub[] = JSON.parse(data);
-    info.id = Math.max(...parsedData.map((item) => item.id)) + 1;
-    if (isNaN(info.id)) info.id = 1;
+    // La asignaci'on de id la hara la DB
+    // info.id = Math.max(...parsedData.map((item) => item.id)) + 1;
+    // if (isNaN(info.id)) info.id = 1;
     const finalData = JSON.stringify([...parsedData, info]);
     await fs.writeFile(file, finalData, 'utf-8');
     await fs.readFile(file, 'utf-8');
@@ -30,7 +31,7 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     return info as Scrub;
   }
 
-  async update(info: Scrub): Promise<Scrub> {
+  async update(info: Partial<Scrub>): Promise<Scrub> {
     if (!info.id) throw new Error('Not valid data');
     const data = await fs.readFile(file, 'utf-8');
     console.log(data);

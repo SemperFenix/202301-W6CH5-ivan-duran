@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Scrub } from '../entities/scrub.models.js';
+import { Scrub } from '../entities/scrub.model.js';
 import { Repo } from '../repository/repo.interface.js';
 
 export class ScrubsController {
@@ -17,7 +17,7 @@ export class ScrubsController {
 
   async getById(req: Request, resp: Response, next: NextFunction) {
     try {
-      const data = await this.repo.queryById(Number(req.params.id));
+      const data = await this.repo.queryById(req.params.id);
 
       resp.json({ results: [data] });
     } catch (error) {
@@ -47,7 +47,7 @@ export class ScrubsController {
 
   async delete(req: Request, resp: Response, next: NextFunction) {
     try {
-      await this.repo.destroy(Number(req.params.id));
+      await this.repo.destroy(req.params.id);
       console.log('Delete successful');
       resp.json({ results: [] });
     } catch (error) {

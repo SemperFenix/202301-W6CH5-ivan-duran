@@ -1,7 +1,7 @@
 import { ScrubsFileRepo } from './scrubs.file.repo';
 import fs from 'fs/promises';
 import { mockScrub, mockScrubPartial } from '../mocks/test.mocks';
-import { Scrub } from '../entities/scrub.models';
+import { Scrub } from '../entities/scrub.model';
 
 jest.mock('fs/promises');
 describe('Given the ScrubsFileRepo', () => {
@@ -26,9 +26,9 @@ describe('Given the ScrubsFileRepo', () => {
     test('Then it should return the argument if it has a valid id', async () => {
       (fs.readFile as jest.Mock).mockResolvedValue('[{"id":2}]');
 
-      const result = await repo.queryById(2);
+      const result = await repo.queryById('2');
       expect(fs.readFile).toHaveBeenCalled();
-      expect(result).toEqual({ id: 2 });
+      expect(result).toEqual({ id: '2' });
     });
   });
 
@@ -38,7 +38,7 @@ describe('Given the ScrubsFileRepo', () => {
 
       expect(fs.readFile).toHaveBeenCalled();
       expect(async () => {
-        await repo.queryById(2);
+        await repo.queryById('2');
       }).rejects.toThrow();
     });
   });
@@ -50,15 +50,15 @@ describe('Given the ScrubsFileRepo', () => {
       expect(fs.readFile).toHaveBeenCalled();
       expect(fs.writeFile).toHaveBeenCalled();
 
-      expect(result).toEqual({ ...mockScrubPartial, id: 1 });
+      expect(result).toEqual({ ...mockScrubPartial, id: '1' });
     });
   });
 
   describe('When call the update method (ok)', () => {
     test('Then it should call readFile, writeFile and return the item updated', async () => {
       const value = [
-        { id: 5, name: 'Test' },
-        { id: 1, name: 'Test2' },
+        { id: '5', name: 'Test' },
+        { id: '1', name: 'Test2' },
       ];
       (fs.readFile as jest.Mock).mockResolvedValue(JSON.stringify(value));
       const result = await repo.update(mockScrub);
@@ -72,8 +72,8 @@ describe('Given the ScrubsFileRepo', () => {
   describe('When call the update method without id (error)', () => {
     test('Then it should throw error', async () => {
       const value = [
-        { id: 5, name: 'Test' },
-        { id: 1, name: 'Test2' },
+        { id: '5', name: 'Test' },
+        { id: '1', name: 'Test2' },
       ];
       (fs.readFile as jest.Mock).mockResolvedValue(JSON.stringify(value));
       const result = repo.update({ name: 'test' } as Scrub);
@@ -86,9 +86,9 @@ describe('Given the ScrubsFileRepo', () => {
 
   describe('When call the update destroy (ok)', () => {
     test('Then it should call readFile and writeFile', async () => {
-      const value = [{ id: 5, name: 'Test' }];
+      const value = [{ id: '5', name: 'Test' }];
       (fs.readFile as jest.Mock).mockResolvedValue(JSON.stringify(value));
-      await repo.destroy(5);
+      await repo.destroy('5');
       expect(fs.readFile).toHaveBeenCalled();
       expect(fs.writeFile).toHaveBeenCalled();
     });
@@ -97,7 +97,7 @@ describe('Given the ScrubsFileRepo', () => {
   describe('When call the update destroy without items (error)', () => {
     test('Then it should throw an error', async () => {
       (fs.readFile as jest.Mock).mockResolvedValue('[]');
-      const result = repo.destroy(5);
+      const result = repo.destroy('5');
       await expect(result).rejects.toThrow();
     });
   });

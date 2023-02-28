@@ -1,9 +1,9 @@
 import { Router as router } from 'express';
 import { ScrubsController } from '../controllers/scrubs.controller.js';
-import { ScrubsFileRepo } from '../repository/scrubs.file.repo.js';
+import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo.js';
 
 export const scrubsRouter = router();
-export const repo = new ScrubsFileRepo();
+export const repo = new ScrubsMongoRepo();
 const controller = new ScrubsController(repo);
 
 scrubsRouter.get('/', controller.getAll.bind(controller));

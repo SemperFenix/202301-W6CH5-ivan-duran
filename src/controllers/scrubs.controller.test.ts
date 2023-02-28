@@ -82,8 +82,12 @@ describe('Given the scrubsController', () => {
 
   describe('When patch is called and return data', () => {
     test('Then it should call resp.json', async () => {
-      delete req.body.id;
-      await controller.patch(req, resp, next);
+      req.body.id = '2';
+      const req2 = {
+        body: {},
+        params: {},
+      } as unknown as Request;
+      await controller.patch(req2, resp, next);
       expect(mockRepo.update).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });

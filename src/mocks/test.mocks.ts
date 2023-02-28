@@ -1,4 +1,4 @@
-import { Scrub } from '../entities/scrub.model';
+import { Scrub } from '../entities/scrub.model.js';
 
 export const mockScrubs: Scrub[] = [
   {

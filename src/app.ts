@@ -19,6 +19,9 @@ const corsOrigins = {
 app.use(cors(corsOrigins)); // NOSONAR not using secure environment
 app.use(express.json());
 
+app.use('/favicon', express.static('../public'));
+
+app.use('/scrubs', scrubsRouter);
 app.use('/', (_req, resp) => {
   resp.json({
     info: 'Scrubs API project -- Iván Durán',
@@ -27,10 +30,6 @@ app.use('/', (_req, resp) => {
     },
   });
 });
-
-app.use('/favicon', express.static('../public'));
-
-app.use('/scrubs', scrubsRouter);
 
 app.use(
   (error: CustomError, _req: Request, resp: Response, _next: NextFunction) => {

@@ -9,10 +9,12 @@ const PORT = process.env.PORT || 4251;
 
 export const server = http.createServer(app);
 
-dbConnect().then((mongoose) => {
-  server.listen(PORT);
-  debug('Connected to DB: ', mongoose.connection.db.databaseName);
-});
+dbConnect()
+  .then((mongoose) => {
+    server.listen(PORT);
+    debug('Connected to DB: ', mongoose.connection.db.databaseName);
+  })
+  .catch((error) => server.emit('error', error));
 
 server.on('error', (error) => {
   debug('Server error: ', error.message);

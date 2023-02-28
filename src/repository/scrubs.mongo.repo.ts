@@ -40,13 +40,13 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
   }
 
   async destroy(info: string): Promise<void> {
-    const data = ScrubModel.findByIdAndDelete(info);
+    debug('Destroy');
+    const data = ScrubModel.findByIdAndRemove(info);
     if (!data)
       throw new HTTPError(
         404,
         'Not found',
         'Delete not possible: id not found'
       );
-    debug('Destroy');
   }
 }

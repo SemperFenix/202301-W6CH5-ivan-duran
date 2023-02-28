@@ -34,7 +34,7 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
 
   async update(info: Scrub): Promise<Scrub> {
     // El método findByIdAndUpdate devuelve por defecto los datos anteriores, por eso le añadimos el modificador
-    const data = await ScrubModel.findByIdAndUpdate(info.id.toString, info, {
+    const data = await ScrubModel.findByIdAndUpdate(info.id, info, {
       new: true,
     });
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in update');

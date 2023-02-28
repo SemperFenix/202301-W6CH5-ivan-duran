@@ -56,6 +56,18 @@ describe('Given the ScrubsMongoRepo', () => {
     });
   });
 
+  describe('When call the create method (error)', () => {
+    test('Then it should call model.create ', async () => {
+      (ScrubModel.create as jest.Mock).mockResolvedValue(undefined);
+
+      expect(ScrubModel.create).toHaveBeenCalled();
+
+      expect(async () => {
+        await repo.create(mockScrubPartial);
+      }).rejects.toThrow();
+    });
+  });
+
   describe('When call the update method (ok)', () => {
     test('Then it should call readFile, writeFile and return the item updated', async () => {
       const value = [
@@ -73,11 +85,12 @@ describe('Given the ScrubsMongoRepo', () => {
   describe('When call the update method without id (error)', () => {
     test('Then it should throw error', async () => {
       (ScrubModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
-      const result = repo.update({ name: 'test' } as Scrub);
       expect(ScrubModel.findByIdAndUpdate).toHaveBeenCalled();
       expect(ScrubModel.findByIdAndUpdate).toHaveBeenCalled();
 
-      await expect(result).rejects.toThrow();
+      expect(async () => {
+        await repo.update({ name: 'test' } as Scrub);
+      }).rejects.toThrow();
     });
   });
 

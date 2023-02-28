@@ -21,7 +21,7 @@ export class ScrubsController {
     }
   }
 
-  async get(req: Request, resp: Response, next: NextFunction) {
+  async getById(req: Request, resp: Response, next: NextFunction) {
     try {
       debug('GetById trying...');
 

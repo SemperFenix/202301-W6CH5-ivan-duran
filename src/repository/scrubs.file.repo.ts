@@ -1,6 +1,6 @@
 import fs from 'fs/promises';
-import { Scrub } from '../entities/scrub.model';
-import { Repo } from './repo.interface';
+import { Scrub } from '../entities/scrub.model.js';
+import { Repo } from './repo.interface.js';
 
 const file = 'data/scrubs.json';
 
@@ -16,6 +16,10 @@ export class ScrubsFileRepo implements Repo<Scrub> {
     const finalData = parsedData.find((item) => item.id === id);
     if (!finalData) throw new Error('Id not found');
     return finalData;
+  }
+
+  async search(_query: { key: string; value: unknown }[]): Promise<Scrub[]> {
+    return [];
   }
 
   async create(info: Partial<Scrub>): Promise<Scrub> {

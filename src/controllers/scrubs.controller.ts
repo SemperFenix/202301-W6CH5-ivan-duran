@@ -39,7 +39,6 @@ export class ScrubsController {
     try {
       debug('Post trying...');
 
-      console.log(req.body);
       const data = await this.repo.create(req.body);
       resp.json({ results: [data] });
     } catch (error) {

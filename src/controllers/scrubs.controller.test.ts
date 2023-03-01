@@ -6,6 +6,7 @@ describe('Given the scrubsController', () => {
   const mockRepo: ScrubsFileRepo = {
     query: jest.fn(),
     queryById: jest.fn(),
+    search: jest.fn(),
     update: jest.fn(),
     create: jest.fn(),
     destroy: jest.fn(),

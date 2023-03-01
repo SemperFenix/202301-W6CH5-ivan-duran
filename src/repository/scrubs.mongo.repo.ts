@@ -4,9 +4,13 @@ import { Repo } from './repo.interface.js';
 import { ScrubModel } from './scrubs.mongo.model.js';
 import createDebug from 'debug';
 
-const debug = createDebug('W7B:mongoRepo');
+const debug = createDebug('W7B:ScrubsRepo');
 
 export class ScrubsMongoRepo implements Repo<Scrub> {
+  constructor() {
+    debug('Instantiated...');
+  }
+
   async query(): Promise<Scrub[]> {
     debug('Query');
     const data = await ScrubModel.find();
@@ -18,6 +22,16 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
 
     const data = await ScrubModel.findById(id);
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in queryId');
+
+    return data;
+  }
+
+  // Método vacío para extender en el futuro
+  async search(query: { key: string; value: unknown }[]): Promise<Scrub[]> {
+    debug('Searching...');
+    const preQuery = query.map((item) => ({ [item.key]: item.value }));
+    const myQuery = preQuery.reduce((obj, item) => ({ ...obj, ...item }));
+    const data = await ScrubModel.find({ ...myQuery });
 
     return data;
   }

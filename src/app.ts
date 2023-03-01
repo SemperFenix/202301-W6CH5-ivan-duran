@@ -4,6 +4,7 @@ import cors from 'cors';
 import { scrubsRouter } from './routers/scrubs.router.js';
 import { CustomError } from './errors/errors.js';
 import createDebug from 'debug';
+import { usersRouter } from './routers/users.router.js';
 
 const debug = createDebug('W6B:App');
 
@@ -19,16 +20,21 @@ const corsOrigins = {
 app.use(cors(corsOrigins)); // NOSONAR not using secure environment
 app.use(express.json());
 
+app.use('/users', usersRouter);
+
 app.use('/scrubs', scrubsRouter);
+
+app.use('/favicon', express.static('../public'));
+
 app.use('/', (_req, resp) => {
   resp.json({
     info: 'Scrubs API project -- Iván Durán',
     endopoints: {
       scrubs: '/scrubs',
+      users: '/users',
     },
   });
 });
-app.use('/favicon', express.static('../public'));
 
 app.use(
   (error: CustomError, _req: Request, resp: Response, _next: NextFunction) => {

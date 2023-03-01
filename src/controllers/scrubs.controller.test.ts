@@ -1,11 +1,12 @@
 import { Request, Response } from 'express';
-import { ScrubsFileRepo } from '../repository/scrubs.file.repo';
+import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo';
 import { ScrubsController } from './scrubs.controller';
 
 describe('Given the scrubsController', () => {
-  const mockRepo: ScrubsFileRepo = {
+  const mockRepo: ScrubsMongoRepo = {
     query: jest.fn(),
     queryById: jest.fn(),
+    search: jest.fn(),
     update: jest.fn(),
     create: jest.fn(),
     destroy: jest.fn(),

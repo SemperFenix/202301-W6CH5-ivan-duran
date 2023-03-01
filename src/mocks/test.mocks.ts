@@ -1,4 +1,5 @@
 import { Scrub } from '../entities/scrub.model.js';
+import { User } from '../entities/user.model.js';
 
 export const mockScrubs: Scrub[] = [
   {
@@ -32,4 +33,14 @@ export const mockScrubPartial: Partial<Scrub> = {
   name: 'Test ok',
   occupattion: 'doctor',
   personality: 'bossy',
+};
+
+export const mockUser: User = {
+  id: '1',
+  email: 'test',
+  password: '1234',
+};
+
+export const mockUserPartial: Partial<User> = {
+  email: 'test',
 };

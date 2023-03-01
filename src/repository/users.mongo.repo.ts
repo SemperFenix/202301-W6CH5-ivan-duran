@@ -1,53 +1,52 @@
-import { Scrub } from '../entities/scrub.model.js';
+import { User } from '../entities/user.model.js';
 import { HTTPError } from '../errors/errors.js';
 import { Repo } from './repo.interface.js';
-import { ScrubModel } from './scrubs.mongo.model.js';
+import { UserModel } from './users.mongo.model.js';
 import createDebug from 'debug';
 
-const debug = createDebug('W7B:ScrubsRepo');
+const debug = createDebug('W7B:UsersRepo');
 
-export class ScrubsMongoRepo implements Repo<Scrub> {
+export class UsersMongoRepo implements Repo<User> {
   constructor() {
     debug('Instantiated...');
   }
 
-  async query(): Promise<Scrub[]> {
+  async query(): Promise<User[]> {
     debug('Query');
-    const data = await ScrubModel.find();
-    return data;
+    return [];
   }
 
-  async queryById(id: string): Promise<Scrub> {
+  async queryById(id: string): Promise<User> {
     debug('QueryID');
 
-    const data = await ScrubModel.findById(id);
+    const data = await UserModel.findById(id);
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in queryId');
-
     return data;
   }
 
-  async search(query: { key: string; value: unknown }[]): Promise<Scrub[]> {
+  // Método vacío para extender en el futuro
+  async search(query: { key: string; value: unknown }[]): Promise<User[]> {
     debug('Searching...');
     const preQuery = query.map((item) => ({ [item.key]: item.value }));
+
     const myQuery = preQuery.reduce((obj, item) => ({ ...obj, ...item }));
-    const data = await ScrubModel.find({ ...myQuery });
+    const data = await UserModel.find({ ...myQuery });
 
     return data;
   }
 
-  async create(info: Partial<Scrub>): Promise<Scrub> {
+  async create(info: Partial<User>): Promise<User> {
     debug('Create');
-    debug(ScrubModel);
 
-    const data = await ScrubModel.create(info);
+    const data = await UserModel.create(info);
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in queryId');
 
     return data;
   }
 
-  async update(info: Scrub): Promise<Scrub> {
+  async update(info: User): Promise<User> {
     // El método findByIdAndUpdate devuelve por defecto los datos anteriores, por eso le añadimos el modificador
-    const data = await ScrubModel.findByIdAndUpdate(info.id, info, {
+    const data = await UserModel.findByIdAndUpdate(info.id, info, {
       new: true,
     });
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in update');
@@ -60,7 +59,7 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
     debug('Destroy');
     debug(id);
     debug(id.trim());
-    const data = await ScrubModel.findByIdAndDelete(id.trim());
+    const data = await UserModel.findByIdAndDelete(id.trim());
     if (!data)
       throw new HTTPError(
         404,

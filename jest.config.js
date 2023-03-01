@@ -10,6 +10,7 @@ export default {
     'app.ts',
     'routers',
     'config.ts',
-    'db',
+    'mocks',
+    'src/repository/*.model.*',
   ],
 };

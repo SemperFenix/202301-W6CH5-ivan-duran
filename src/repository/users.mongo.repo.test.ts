@@ -1,54 +1,51 @@
-import { mockScrub, mockScrubPartial } from '../mocks/test.mocks.js';
-import { Scrub } from '../entities/scrub.model.js';
-import { ScrubsMongoRepo } from './scrubs.mongo.repo.js';
-import { ScrubModel } from './scrubs.mongo.model.js';
+import { mockUser, mockUserPartial } from '../mocks/test.mocks.js';
+import { User } from '../entities/user.model.js';
+import { UsersMongoRepo } from './users.mongo.repo.js';
+import { UserModel } from './users.mongo.model.js';
 
-jest.mock('./scrubs.mongo.model.js');
-describe('Given the ScrubsMongoRepo', () => {
-  const repo = new ScrubsMongoRepo();
+jest.mock('./users.mongo.model.js');
+describe('Given the UsersMongoRepo', () => {
+  const repo = new UsersMongoRepo();
 
   describe('When instantiated', () => {
     test('Then it should be instance of class', () => {
-      expect(repo).toBeInstanceOf(ScrubsMongoRepo);
+      expect(repo).toBeInstanceOf(UsersMongoRepo);
     });
   });
 
   describe('When call the query method', () => {
     test('Then it should call the readFile function and return the data', async () => {
-      (ScrubModel.find as unknown as jest.Mock).mockResolvedValue([
-        { name: 'test' },
-      ]);
+      (UserModel.find as unknown as jest.Mock).mockResolvedValue([]);
       const result = await repo.query();
-      expect(ScrubModel.find).toHaveBeenCalled();
-      expect(result).toStrictEqual([{ name: 'test' }]);
+      expect(result).toEqual([]);
     });
   });
 
   describe('When call the queryById method (ok)', () => {
     test('Then it should return the argument if it has a valid id', async () => {
-      (ScrubModel.findById as unknown as jest.Mock).mockResolvedValue([
+      (UserModel.findById as unknown as jest.Mock).mockResolvedValue([
         { id: '2' },
       ]);
 
       const result = await repo.queryById('2');
-      expect(ScrubModel.findById).toHaveBeenCalled();
+      expect(UserModel.findById).toHaveBeenCalled();
       expect(result).toEqual([{ id: '2' }]);
     });
   });
 
   describe('When call the queryById method (error)', () => {
     test('Then it should throw an error if it has not a valid id', () => {
-      (ScrubModel.findById as jest.Mock).mockResolvedValue(undefined);
+      (UserModel.findById as jest.Mock).mockResolvedValue(undefined);
       expect(async () => {
         await repo.queryById('1');
       }).rejects.toThrow();
-      expect(ScrubModel.findById).toHaveBeenCalled();
+      expect(UserModel.findById).toHaveBeenCalled();
     });
   });
 
   describe('When calling the search method (ok)', () => {
     test('Then it should return an array with the results', async () => {
-      (ScrubModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
+      (UserModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
       const result = await repo.search([{ key: 'email', value: 'Test' }]);
       expect(result).toEqual([{ email: 'Test' }]);
     });
@@ -56,9 +53,9 @@ describe('Given the ScrubsMongoRepo', () => {
 
   describe('When call the create method', () => {
     test('Then it should call model.create ', async () => {
-      (ScrubModel.create as jest.Mock).mockResolvedValue([{ name: 'test' }]);
-      const result = await repo.create(mockScrubPartial);
-      expect(ScrubModel.create).toHaveBeenCalled();
+      (UserModel.create as jest.Mock).mockResolvedValue([{ name: 'test' }]);
+      const result = await repo.create(mockUserPartial);
+      expect(UserModel.create).toHaveBeenCalled();
 
       expect(result).toEqual([{ name: 'test' }]);
     });
@@ -66,12 +63,12 @@ describe('Given the ScrubsMongoRepo', () => {
 
   describe('When call the create method (error)', () => {
     test('Then it should call model.create ', async () => {
-      (ScrubModel.create as jest.Mock).mockResolvedValue(undefined);
+      (UserModel.create as jest.Mock).mockResolvedValue(undefined);
 
-      expect(ScrubModel.create).toHaveBeenCalled();
+      expect(UserModel.create).toHaveBeenCalled();
 
       expect(async () => {
-        await repo.create(mockScrubPartial);
+        await repo.create(mockUserPartial);
       }).rejects.toThrow();
     });
   });
@@ -82,9 +79,9 @@ describe('Given the ScrubsMongoRepo', () => {
         { id: '5', name: 'Test' },
         { id: '1', name: 'Test2' },
       ];
-      (ScrubModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(value);
-      const result = await repo.update(mockScrub);
-      expect(ScrubModel.findByIdAndUpdate).toHaveBeenCalled();
+      (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(value);
+      const result = await repo.update(mockUser);
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
 
       expect(result).toEqual(value);
     });
@@ -92,12 +89,12 @@ describe('Given the ScrubsMongoRepo', () => {
 
   describe('When call the update method without id (error)', () => {
     test('Then it should throw error', async () => {
-      (ScrubModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
-      expect(ScrubModel.findByIdAndUpdate).toHaveBeenCalled();
-      expect(ScrubModel.findByIdAndUpdate).toHaveBeenCalled();
+      (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
+      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
 
       expect(async () => {
-        await repo.update({ name: 'test' } as Scrub);
+        await repo.update({ name: 'test' } as unknown as User);
       }).rejects.toThrow();
     });
   });
@@ -105,15 +102,15 @@ describe('Given the ScrubsMongoRepo', () => {
   describe('When call the update destroy (ok)', () => {
     test('Then it should call readFile and writeFile', async () => {
       const value = '[{ "id": "5", "name": "Test" }]';
-      (ScrubModel.findByIdAndDelete as jest.Mock).mockResolvedValue(value);
+      (UserModel.findByIdAndDelete as jest.Mock).mockResolvedValue(value);
       await repo.destroy('5');
-      expect(ScrubModel.findByIdAndDelete).toHaveBeenCalled();
+      expect(UserModel.findByIdAndDelete).toHaveBeenCalled();
     });
   });
 
   describe('When call the update destroy without items (error)', () => {
     test('Then it should throw an error', async () => {
-      (ScrubModel.findByIdAndDelete as jest.Mock).mockResolvedValue(undefined);
+      (UserModel.findByIdAndDelete as jest.Mock).mockResolvedValue(undefined);
       const result = repo.destroy('1');
       await expect(result).rejects.toThrow();
     });

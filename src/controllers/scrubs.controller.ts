@@ -3,7 +3,7 @@ import { Scrub } from '../entities/scrub.model.js';
 import { Repo } from '../repository/repo.interface.js';
 import createDebug from 'debug';
 
-const debug = createDebug('W7B:controller');
+const debug = createDebug('W7B:scrubsController');
 
 export class ScrubsController {
   // eslint-disable-next-line no-unused-vars
@@ -39,7 +39,6 @@ export class ScrubsController {
     try {
       debug('Post trying...');
 
-      console.log(req.body);
       const data = await this.repo.create(req.body);
       resp.json({ results: [data] });
     } catch (error) {

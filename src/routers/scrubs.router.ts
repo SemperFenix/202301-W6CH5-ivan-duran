@@ -2,6 +2,8 @@ import { Router as router } from 'express';
 import { ScrubsController } from '../controllers/scrubs.controller.js';
 import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo.js';
 
+// Se puede añadir la inyección de dependencias en el repo del modelo.
+
 export const scrubsRouter = router();
 export const repo = new ScrubsMongoRepo();
 const controller = new ScrubsController(repo);

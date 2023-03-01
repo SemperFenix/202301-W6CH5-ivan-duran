@@ -58,31 +58,4 @@ export class UsersController {
       next(error);
     }
   }
-
-  async patch(req: Request, resp: Response, next: NextFunction) {
-    try {
-      debug('Patch trying...');
-
-      req.body.id = req.params.id ? req.params.id : req.body.id;
-      const data = await this.repo.update(req.body);
-      resp.json({ results: [data] });
-    } catch (error) {
-      debug('Error patching');
-
-      next(error);
-    }
-  }
-
-  async delete(req: Request, resp: Response, next: NextFunction) {
-    try {
-      debug('Delete trying...');
-
-      await this.repo.destroy(req.params.id);
-      resp.json({ results: [] });
-    } catch (error) {
-      debug('Error deleting');
-
-      next(error);
-    }
-  }
 }

@@ -21,7 +21,6 @@ export class UsersMongoRepo implements Repo<User> {
 
     const data = await UserModel.findById(id);
     if (!data) throw new HTTPError(404, 'Not found', 'Id not found in queryId');
-
     return data;
   }
 

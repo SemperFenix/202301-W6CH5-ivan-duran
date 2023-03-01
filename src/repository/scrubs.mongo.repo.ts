@@ -26,7 +26,6 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
     return data;
   }
 
-  // Método vacío para extender en el futuro
   async search(query: { key: string; value: unknown }[]): Promise<Scrub[]> {
     debug('Searching...');
     const preQuery = query.map((item) => ({ [item.key]: item.value }));

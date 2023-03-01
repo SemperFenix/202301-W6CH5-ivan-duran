@@ -24,7 +24,7 @@ describe('Given the ScrubsMongoRepo', () => {
     });
   });
 
-  describe('When call the readOne method (ok)', () => {
+  describe('When call the queryById method (ok)', () => {
     test('Then it should return the argument if it has a valid id', async () => {
       (ScrubModel.findById as unknown as jest.Mock).mockResolvedValue([
         { id: '2' },
@@ -36,13 +36,21 @@ describe('Given the ScrubsMongoRepo', () => {
     });
   });
 
-  describe('When call the readOne method (error)', () => {
+  describe('When call the queryById method (error)', () => {
     test('Then it should throw an error if it has not a valid id', () => {
       (ScrubModel.findById as jest.Mock).mockResolvedValue(undefined);
       expect(async () => {
         await repo.queryById('1');
       }).rejects.toThrow();
       expect(ScrubModel.findById).toHaveBeenCalled();
+    });
+  });
+
+  describe('When calling the search method (ok)', () => {
+    test('Then it should return an array with the results', async () => {
+      (ScrubModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
+      const result = await repo.search([{ key: 'email', value: 'Test' }]);
+      expect(result).toEqual([{ email: 'Test' }]);
     });
   });
 

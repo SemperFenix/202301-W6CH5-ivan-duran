@@ -6,14 +6,24 @@ En la creación del servidor vamos a utilizar las capas de App -> Router -> Cont
 
 ## Tareas realizadas
 
-- [x] Permitir método GET
-- [x] Permitir método POST a través de Postman
-- [x] Permitir método PATCH a través de Postman
-- [x] Permitir método DELETE a través de Postman
+- [x] Permitir método GET a localhost
+- [x] Permitir método POST a localhost
+- [x] Permitir método PATCH a localhost
+- [x] Permitir método DELETE a localhost
+
+## Week7 Challenge 2
+
+- [x] Mismos métodos conectados a Mongo en vez de localhost
+
+## Week7 Challenge 3
+
+- [ ] Permitir el registro y login de usuarios
 
 ## Tareas a realizar
 
-- [ ] Integración con frontend.
+- [x] Integración con frontend a localhost
+- [x] Integración con frontend a mongo
+- [ ] Integración de registro de usuarios.
 
 ## Dudas
 

@@ -24,7 +24,7 @@ export function logged(req: CustomRequest, resp: Response, next: NextFunction) {
       );
 
     const token = authHeader.slice(7);
-    const tokenPayload = Auth.verifyJWT(token);
+    const tokenPayload = Auth.checkAndReturnToken(token);
     req.info = tokenPayload;
     next();
   } catch (error) {

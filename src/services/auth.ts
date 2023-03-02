@@ -22,7 +22,7 @@ export class Auth {
       throw new Error('Invalid token');
     }
 
-    return verify;
+    return verify as TokenPayload;
   }
 
   static hash(value: string) {

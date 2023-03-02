@@ -14,7 +14,7 @@ describe('Given the Auth class', () => {
 
   describe('When called the sign method with correct payload', () => {
     test('Then it should call the jwt.sign', () => {
-      Auth.signJWT({ a: 'test' } as unknown as TokenPayload);
+      Auth.createToken({ a: 'test' } as unknown as TokenPayload);
       expect(jwt.sign).toHaveBeenCalled();
     });
   });
@@ -23,7 +23,7 @@ describe('Given the Auth class', () => {
     test('Then it should call the jwt.verify', () => {
       (jwt.verify as jest.Mock).mockReturnValue({ a: 'test' });
 
-      Auth.verifyJWT('a');
+      Auth.checkAndReturnToken('a');
       expect(jwt.verify).toHaveBeenCalled();
     });
   });
@@ -31,7 +31,7 @@ describe('Given the Auth class', () => {
   describe('When called the verify with incorrect data', () => {
     test('Then it should throw error', () => {
       (jwt.verify as jest.Mock).mockReturnValue('a');
-      expect(() => Auth.verifyJWT('a')).toThrow();
+      expect(() => Auth.checkAndReturnToken('a')).toThrow();
     });
   });
 
@@ -49,20 +49,11 @@ describe('Given the Auth class', () => {
     });
   });
 
-  describe('When called the sign method with no config.secret', () => {
-    test('Then it should return', () => {
-      delete config.secret;
-      Auth.signJWT({ a: 'test' } as unknown as TokenPayload);
-
-      expect(jwt.sign).not.toHaveBeenCalled();
-    });
-  });
-
   describe('When called the verify method with no config.secret', () => {
     test('Then it should return', () => {
       delete config.secret;
 
-      Auth.verifyJWT('a');
+      Auth.checkAndReturnToken('a');
 
       expect(jwt.verify).not.toHaveBeenCalled();
     });

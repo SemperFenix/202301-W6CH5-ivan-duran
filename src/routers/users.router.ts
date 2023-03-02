@@ -3,7 +3,7 @@ import { UsersController } from '../controllers/users.controller.js';
 import { UsersMongoRepo } from '../repository/users.mongo.repo.js';
 
 export const usersRouter = router();
-export const repo = new UsersMongoRepo();
+const repo = new UsersMongoRepo();
 const controller = new UsersController(repo);
 
 usersRouter.post('/register', controller.register.bind(controller));

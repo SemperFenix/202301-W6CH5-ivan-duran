@@ -1,3 +1,5 @@
+import { User } from './user.model';
+
 export type Scrub = {
   id: string;
   img: string;
@@ -5,4 +7,5 @@ export type Scrub = {
   occupattion: string;
   personality: string;
   extendPerso: string;
+  owner: User;
 };

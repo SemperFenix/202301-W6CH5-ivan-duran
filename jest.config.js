@@ -11,6 +11,6 @@ export default {
     'routers',
     'config.ts',
     'mocks',
-    'src/repository/*.model.*',
+    'src/repository/*.*.model.*',
   ],
 };

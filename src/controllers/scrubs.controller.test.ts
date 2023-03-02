@@ -1,9 +1,18 @@
 import { Request, Response } from 'express';
 import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo';
+import { UsersMongoRepo } from '../repository/users.mongo.repo';
 import { ScrubsController } from './scrubs.controller';
 
 describe('Given the scrubsController', () => {
-  const mockRepo: ScrubsMongoRepo = {
+  const mockScrubRepo: ScrubsMongoRepo = {
+    query: jest.fn(),
+    queryById: jest.fn(),
+    search: jest.fn(),
+    update: jest.fn(),
+    create: jest.fn(),
+    destroy: jest.fn(),
+  };
+  const mockUserRepo: UsersMongoRepo = {
     query: jest.fn(),
     queryById: jest.fn(),
     search: jest.fn(),
@@ -23,19 +32,19 @@ describe('Given the scrubsController', () => {
   } as unknown as Response;
 
   const next = jest.fn();
-  const controller = new ScrubsController(mockRepo);
+  const controller = new ScrubsController(mockScrubRepo, mockUserRepo);
 
   describe('When getAll is called', () => {
     test('Then it should call resp.json', async () => {
       await controller.getAll(req, resp, next);
-      expect(mockRepo.query).toHaveBeenCalled();
+      expect(mockScrubRepo.query).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
 
   describe('When getAll returns an error', () => {
     test('Then it should call next', async () => {
-      (mockRepo.query as jest.Mock).mockRejectedValue(new Error(''));
+      (mockScrubRepo.query as jest.Mock).mockRejectedValue(new Error(''));
       await controller.getAll(req, resp, next);
       expect(next).toHaveBeenCalled();
     });
@@ -44,14 +53,14 @@ describe('Given the scrubsController', () => {
   describe('When getById is called and return data', () => {
     test('Then it should call resp.json', async () => {
       await controller.getById(req, resp, next);
-      expect(mockRepo.queryById).toHaveBeenCalled();
+      expect(mockScrubRepo.queryById).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
 
   describe('When getById returns an error', () => {
     test('Then it should call next', async () => {
-      (mockRepo.queryById as jest.Mock).mockRejectedValue(new Error(''));
+      (mockScrubRepo.queryById as jest.Mock).mockRejectedValue(new Error(''));
       await controller.getById(req, resp, next);
       expect(next).toHaveBeenCalled();
     });
@@ -60,14 +69,14 @@ describe('Given the scrubsController', () => {
   describe('When post is called and return data', () => {
     test('Then it should call resp.json', async () => {
       await controller.post(req, resp, next);
-      expect(mockRepo.create).toHaveBeenCalled();
+      expect(mockScrubRepo.create).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
 
   describe('When post is called and return error', () => {
     test('Then it should call resp.json', async () => {
-      (mockRepo.create as jest.Mock).mockRejectedValue(new Error(''));
+      (mockScrubRepo.create as jest.Mock).mockRejectedValue(new Error(''));
       await controller.post(req, resp, next);
       expect(next).toHaveBeenCalled();
     });
@@ -76,7 +85,7 @@ describe('Given the scrubsController', () => {
   describe('When patch is called and return data', () => {
     test('Then it should call resp.json', async () => {
       await controller.patch(req, resp, next);
-      expect(mockRepo.update).toHaveBeenCalled();
+      expect(mockScrubRepo.update).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
@@ -89,14 +98,14 @@ describe('Given the scrubsController', () => {
         params: {},
       } as unknown as Request;
       await controller.patch(req2, resp, next);
-      expect(mockRepo.update).toHaveBeenCalled();
+      expect(mockScrubRepo.update).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
 
   describe('When patch is called and return error', () => {
     test('Then it should call resp.json', async () => {
-      (mockRepo.update as jest.Mock).mockRejectedValue(new Error(''));
+      (mockScrubRepo.update as jest.Mock).mockRejectedValue(new Error(''));
       await controller.patch(req, resp, next);
       expect(next).toHaveBeenCalled();
     });
@@ -105,14 +114,14 @@ describe('Given the scrubsController', () => {
   describe('When delete is called and return data', () => {
     test('Then it should call resp.json', async () => {
       await controller.delete(req, resp, next);
-      expect(mockRepo.destroy).toHaveBeenCalled();
+      expect(mockScrubRepo.destroy).toHaveBeenCalled();
       expect(resp.json).toHaveBeenCalled();
     });
   });
 
   describe('When patch is called and return error', () => {
     test('Then it should call resp.json', async () => {
-      (mockRepo.destroy as jest.Mock).mockRejectedValue(new Error(''));
+      (mockScrubRepo.destroy as jest.Mock).mockRejectedValue(new Error(''));
       await controller.delete(req, resp, next);
       expect(next).toHaveBeenCalled();
     });

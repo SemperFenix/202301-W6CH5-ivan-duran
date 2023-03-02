@@ -3,7 +3,7 @@ import { User } from '../entities/user.model.js';
 import { Repo } from '../repository/repo.interface.js';
 import createDebug from 'debug';
 import { HTTPError } from '../errors/errors.js';
-import { Auth } from '../services/auth.js';
+import { Auth, TokenPayload } from '../services/auth.js';
 
 const debug = createDebug('W7B:usersController');
 
@@ -21,7 +21,7 @@ export class UsersController {
         throw new HTTPError(401, 'Unauthorized', 'Invalid email');
       req.body.password = await Auth.hash(req.body.password);
       const data = await this.repo.create(req.body);
-
+      req.body.scrubs = [];
       resp.status(201);
       debug('Register successful...');
       resp.json({ results: [data] });
@@ -47,9 +47,13 @@ export class UsersController {
         throw new HTTPError(401, 'Unauthorized', 'Email not found');
 
       if (!(await Auth.compare(password, data[0].password)))
-        throw new HTTPError(401, 'Unauthorized', 'Email not found');
-
-      const token = Auth.signJWT(email) as string;
+        throw new HTTPError(401, 'Unauthorized', 'Password not match');
+      const payload: TokenPayload = {
+        id: data[0].id,
+        email: data[0].email,
+        role: 'admin',
+      };
+      const token = Auth.createToken(payload);
       debug('Login sucessful!');
       resp.json({ results: [{ token }] });
     } catch (error) {

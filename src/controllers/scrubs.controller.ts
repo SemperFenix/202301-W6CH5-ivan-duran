@@ -2,19 +2,22 @@ import { NextFunction, Request, Response } from 'express';
 import { Scrub } from '../entities/scrub.model.js';
 import { Repo } from '../repository/repo.interface.js';
 import createDebug from 'debug';
+import { CustomRequest } from '../interceptors/logged.js';
+import { HTTPError } from '../errors/errors.js';
+import { User } from '../entities/user.model.js';
 
 const debug = createDebug('W7B:scrubsController');
 
 export class ScrubsController {
   // eslint-disable-next-line no-unused-vars
-  constructor(public repo: Repo<Scrub>) {
+  constructor(public scrubRepo: Repo<Scrub>, public userRepo: Repo<User>) {
     debug('Instantiated');
   }
 
   async getAll(_req: Request, resp: Response, next: NextFunction) {
     try {
       debug('GetAll trying...');
-      const data = await this.repo.query();
+      const data = await this.scrubRepo.query();
       resp.json({ results: data });
     } catch (error) {
       next(error);
@@ -25,7 +28,7 @@ export class ScrubsController {
     try {
       debug('GetById trying...');
 
-      const data = await this.repo.queryById(req.params.id);
+      const data = await this.scrubRepo.queryById(req.params.id);
 
       if (data === undefined) resp.json({ results: [] });
       resp.json({ results: [data] });
@@ -35,12 +38,21 @@ export class ScrubsController {
     }
   }
 
-  async post(req: Request, resp: Response, next: NextFunction) {
+  async post(req: CustomRequest, resp: Response, next: NextFunction) {
     try {
       debug('Post trying...');
 
-      const data = await this.repo.create(req.body);
-      resp.json({ results: [data] });
+      const userId = req.info?.id;
+
+      if (!userId) throw new HTTPError(404, 'Not found', 'No user id');
+
+      const actualUser = await this.userRepo.queryById(userId);
+      req.body.owner = actualUser;
+      const newScrub = await this.scrubRepo.create(req.body);
+
+      actualUser.scrubs = [...actualUser.scrubs, newScrub];
+      await this.userRepo.update(actualUser);
+      resp.json({ results: [newScrub] });
     } catch (error) {
       debug('Error posting');
 
@@ -53,7 +65,7 @@ export class ScrubsController {
       debug('Patch trying...');
 
       req.body.id = req.params.id ? req.params.id : req.body.id;
-      const data = await this.repo.update(req.body);
+      const data = await this.scrubRepo.update(req.body);
       resp.json({ results: [data] });
     } catch (error) {
       debug('Error patching');
@@ -66,7 +78,7 @@ export class ScrubsController {
     try {
       debug('Delete trying...');
 
-      await this.repo.destroy(req.params.id);
+      await this.scrubRepo.destroy(req.params.id);
       resp.json({ results: [] });
     } catch (error) {
       debug('Error deleting');

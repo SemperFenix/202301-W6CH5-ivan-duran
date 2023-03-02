@@ -91,7 +91,6 @@ describe('Given the UsersMongoRepo', () => {
     test('Then it should throw error', async () => {
       (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
       expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
-      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
 
       expect(async () => {
         await repo.update({ name: 'test' } as unknown as User);

@@ -56,15 +56,13 @@ export class UsersMongoRepo implements Repo<User> {
   }
 
   async destroy(id: string): Promise<void> {
-    debug('Destroy');
-    debug(id);
-    debug(id.trim());
-    const data = await UserModel.findByIdAndDelete(id.trim());
+    const data = await UserModel.findByIdAndDelete(id);
     if (!data)
       throw new HTTPError(
         404,
         'Not found',
         'Delete not possible: id not found'
       );
+    debug('Destroyed!');
   }
 }

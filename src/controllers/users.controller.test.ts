@@ -65,7 +65,7 @@ describe('Given the scrubsController', () => {
       };
 
       (mockRepo.search as jest.Mock).mockResolvedValue([
-        { email: 'Test', password: 'test' },
+        { email: 'Test', password: passwd },
       ]);
       (Auth.compare as jest.Mock).mockResolvedValue(true);
 
@@ -82,7 +82,7 @@ describe('Given the scrubsController', () => {
       };
       (Auth.compare as jest.Mock).mockResolvedValue(true);
       (mockRepo.search as jest.Mock).mockResolvedValue([
-        { email: 'Test', password: 'test' },
+        { email: 'Test', password: passwd },
       ]);
       await controller.login(req, resp, next);
 

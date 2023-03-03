@@ -13,15 +13,19 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
 
   async query(): Promise<Scrub[]> {
     debug('Query');
-    const data = await ScrubModel.find();
+
+    const data = await ScrubModel.find().populate('owner');
     return data;
   }
 
   async queryById(id: string): Promise<Scrub> {
     debug('QueryID');
 
-    const data = await ScrubModel.findById(id);
-    if (!data) throw new HTTPError(404, 'Not found', 'Id not found in queryId');
+    const data = await ScrubModel.findById(id).populate('owner');
+
+    if (!data) {
+      throw new HTTPError(404, 'Not found', 'Id not found in queryId');
+    }
 
     return data;
   }
@@ -57,15 +61,13 @@ export class ScrubsMongoRepo implements Repo<Scrub> {
   }
 
   async destroy(id: string): Promise<void> {
-    debug('Destroy');
-    debug(id);
-    debug(id.trim());
-    const data = await ScrubModel.findByIdAndDelete(id.trim());
+    const data = await ScrubModel.findByIdAndDelete(id);
     if (!data)
       throw new HTTPError(
         404,
         'Not found',
         'Delete not possible: id not found'
       );
+    debug('Destroyed!');
   }
 }

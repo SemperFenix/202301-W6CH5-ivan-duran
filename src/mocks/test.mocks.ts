@@ -9,6 +9,7 @@ export const mockScrubs: Scrub[] = [
     personality: 'hugger',
     extendPerso: '',
     img: '',
+    owner: {} as User,
   },
   {
     id: '2',
@@ -17,6 +18,7 @@ export const mockScrubs: Scrub[] = [
     personality: 'absolute truth',
     extendPerso: '',
     img: '',
+    owner: {} as User,
   },
 ];
 
@@ -27,6 +29,7 @@ export const mockScrub: Scrub = {
   personality: 'bossy',
   extendPerso: '',
   img: '',
+  owner: {} as User,
 };
 
 export const mockScrubPartial: Partial<Scrub> = {
@@ -39,6 +42,7 @@ export const mockUser: User = {
   id: '1',
   email: 'test',
   password: '1234',
+  scrubs: [],
 };
 
 export const mockUserPartial: Partial<User> = {

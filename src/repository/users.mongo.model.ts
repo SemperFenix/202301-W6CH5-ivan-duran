@@ -11,6 +11,12 @@ const userSchema = new Schema<User>({
     type: String,
     required: true,
   },
+  scrubs: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Scrub',
+    },
+  ],
 });
 
 userSchema.set('toJSON', {

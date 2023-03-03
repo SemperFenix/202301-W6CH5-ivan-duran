@@ -4,9 +4,10 @@ import { ScrubsMongoRepo } from './scrubs.mongo.repo.js';
 import { ScrubModel } from './scrubs.mongo.model.js';
 
 jest.mock('./scrubs.mongo.model.js');
-describe('Given the ScrubsMongoRepo', () => {
-  const repo = new ScrubsMongoRepo();
 
+const repo = new ScrubsMongoRepo();
+
+describe('Given the ScrubsMongoRepo', () => {
   describe('When instantiated', () => {
     test('Then it should be instance of class', () => {
       expect(repo).toBeInstanceOf(ScrubsMongoRepo);
@@ -15,30 +16,33 @@ describe('Given the ScrubsMongoRepo', () => {
 
   describe('When call the query method', () => {
     test('Then it should call the readFile function and return the data', async () => {
-      (ScrubModel.find as unknown as jest.Mock).mockResolvedValue([
-        { name: 'test' },
-      ]);
+      (ScrubModel.find as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockReturnValue([{ name: 'test' }]),
+      }));
       const result = await repo.query();
       expect(ScrubModel.find).toHaveBeenCalled();
-      expect(result).toStrictEqual([{ name: 'test' }]);
+      expect(result).toEqual([{ name: 'test' }]);
     });
   });
 
   describe('When call the queryById method (ok)', () => {
     test('Then it should return the argument if it has a valid id', async () => {
-      (ScrubModel.findById as unknown as jest.Mock).mockResolvedValue([
-        { id: '2' },
-      ]);
+      (ScrubModel.findById as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockReturnValue({ name: 'test' }),
+      }));
 
       const result = await repo.queryById('2');
       expect(ScrubModel.findById).toHaveBeenCalled();
-      expect(result).toEqual([{ id: '2' }]);
+      expect(result).toEqual({ name: 'test' });
     });
   });
 
   describe('When call the queryById method (error)', () => {
     test('Then it should throw an error if it has not a valid id', () => {
-      (ScrubModel.findById as jest.Mock).mockResolvedValue(undefined);
+      (ScrubModel.findById as jest.Mock).mockImplementation(() => ({
+        populate: jest.fn().mockReturnValue(undefined),
+      }));
+
       expect(async () => {
         await repo.queryById('1');
       }).rejects.toThrow();
@@ -49,7 +53,10 @@ describe('Given the ScrubsMongoRepo', () => {
   describe('When calling the search method (ok)', () => {
     test('Then it should return an array with the results', async () => {
       (ScrubModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
-      const result = await repo.search([{ key: 'email', value: 'Test' }]);
+      const result = await repo.search([
+        { key: 'email', value: 'Test' },
+        { key: 'test', value: 'test2' },
+      ]);
       expect(result).toEqual([{ email: 'Test' }]);
     });
   });

@@ -2,7 +2,8 @@ import jwt from 'jsonwebtoken';
 import { config } from '../config.js';
 import bcrypt from 'bcryptjs';
 
-type TokenPayload = {
+export type TokenPayload = {
+  id: string;
   email: string;
   role: string;
 };
@@ -10,16 +11,18 @@ type TokenPayload = {
 const salt = 10;
 
 export class Auth {
-  static signJWT(payload: TokenPayload) {
-    if (!config.secret) return;
-    return jwt.sign(payload, config.secret);
+  static createToken(payload: TokenPayload) {
+    return jwt.sign(payload, config.secret as string);
   }
 
-  static verifyJWT(token: string) {
+  static checkAndReturnToken(token: string) {
     if (!config.secret) return;
     const verify = jwt.verify(token, config.secret);
-    if (typeof verify === 'string') throw new Error('Invalid token');
-    return verify;
+    if (typeof verify === 'string') {
+      throw new Error('Invalid token');
+    }
+
+    return verify as TokenPayload;
   }
 
   static hash(value: string) {

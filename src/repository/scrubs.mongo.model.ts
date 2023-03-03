@@ -1,4 +1,5 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, SchemaTypes } from 'mongoose';
+
 import { Scrub } from '../entities/scrub.model.js';
 
 const scrubSchema = new Schema<Scrub>({
@@ -25,6 +26,10 @@ const scrubSchema = new Schema<Scrub>({
   extendPerso: {
     type: String,
     required: true,
+  },
+  owner: {
+    type: SchemaTypes.ObjectId,
+    ref: 'User',
   },
 });
 

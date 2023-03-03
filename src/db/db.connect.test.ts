@@ -1,7 +1,13 @@
-import { dbConnect } from './db.connect';
+import { dbConnect } from './db.connect.js';
 import mongoose from 'mongoose';
 
 jest.mock('mongoose');
+jest.mock('../config.js', () => ({
+  _dirname: 'test',
+  config: {
+    secret: 'test',
+  },
+}));
 describe('Given the dbconnect function', () => {
   dbConnect();
 

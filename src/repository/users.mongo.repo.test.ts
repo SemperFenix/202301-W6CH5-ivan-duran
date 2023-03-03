@@ -46,7 +46,10 @@ describe('Given the UsersMongoRepo', () => {
   describe('When calling the search method (ok)', () => {
     test('Then it should return an array with the results', async () => {
       (UserModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
-      const result = await repo.search([{ key: 'email', value: 'Test' }]);
+      const result = await repo.search([
+        { key: 'email', value: 'Test' },
+        { key: 'test', value: 'test2' },
+      ]);
       expect(result).toEqual([{ email: 'Test' }]);
     });
   });
@@ -90,7 +93,6 @@ describe('Given the UsersMongoRepo', () => {
   describe('When call the update method without id (error)', () => {
     test('Then it should throw error', async () => {
       (UserModel.findByIdAndUpdate as jest.Mock).mockResolvedValue(undefined);
-      expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
       expect(UserModel.findByIdAndUpdate).toHaveBeenCalled();
 
       expect(async () => {

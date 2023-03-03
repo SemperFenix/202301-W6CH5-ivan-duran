@@ -1,4 +1,6 @@
 import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 dotenv.config();
 
@@ -9,3 +11,6 @@ export const config = {
   collection: process.env.DB_NAME,
   secret: process.env.SECRET,
 };
+
+// Esto devuelve la carpeta del SO en la que estamos en forma de string
+export const _dirname = path.dirname(fileURLToPath(import.meta.url));

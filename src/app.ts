@@ -5,13 +5,16 @@ import { scrubsRouter } from './routers/scrubs.router.js';
 import { CustomError } from './errors/errors.js';
 import createDebug from 'debug';
 import { usersRouter } from './routers/users.router.js';
+import path from 'path';
+import { _dirname } from './config.js';
 
 const debug = createDebug('W6B:App');
 
 export const app = express();
 app.disable('x-powered-by');
+debug(_dirname);
 
-app.use(express.static('public'));
+app.use(express.static(path.resolve(__dirname, 'public')));
 
 app.use(morgan('dev'));
 const corsOrigins = {

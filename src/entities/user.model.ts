@@ -1,4 +1,4 @@
-import { Scrub } from './scrub.model';
+import { Scrub } from './scrub.model.js';
 
 export type User = {
   id: string;

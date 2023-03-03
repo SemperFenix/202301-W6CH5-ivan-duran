@@ -1,6 +1,6 @@
 import { NextFunction, Response, Request } from 'express';
-import { HTTPError } from '../errors/errors';
-import { Auth, TokenPayload } from '../services/auth';
+import { HTTPError } from '../errors/errors.js';
+import { Auth, TokenPayload } from '../services/auth.js';
 
 export interface CustomRequest extends Request {
   info?: TokenPayload;

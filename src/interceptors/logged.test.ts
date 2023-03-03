@@ -1,6 +1,6 @@
 import { NextFunction, Response } from 'express';
-import { Auth, TokenPayload } from '../services/auth';
-import { CustomRequest, logged } from './logged';
+import { Auth, TokenPayload } from '../services/auth.js';
+import { CustomRequest, logged } from './logged.js';
 jest.mock('../services/auth.js');
 
 const mockReq = {
@@ -8,6 +8,13 @@ const mockReq = {
 } as unknown as CustomRequest;
 const mockResp = {} as Response;
 const next = jest.fn() as NextFunction;
+
+jest.mock('../config.js', () => ({
+  _dirname: 'test',
+  config: {
+    secret: 'test',
+  },
+}));
 
 describe('Given the logged middleware function', () => {
   afterEach(() => {

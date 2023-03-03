@@ -1,9 +1,15 @@
 import { Request, Response } from 'express';
-import { UsersMongoRepo } from '../repository/users.mongo.repo';
-import { Auth } from '../services/auth';
-import { UsersController } from './users.controller';
+import { UsersMongoRepo } from '../repository/users.mongo.repo.js';
+import { Auth } from '../services/auth.js';
+import { UsersController } from './users.controller.js';
 
 jest.mock('../services/auth.js');
+jest.mock('../config.js', () => ({
+  _dirname: 'test',
+  config: {
+    secret: 'test',
+  },
+}));
 
 describe('Given the scrubsController', () => {
   const mockRepo = {

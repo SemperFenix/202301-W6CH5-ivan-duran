@@ -1,7 +1,9 @@
-import { Request, Response } from 'express';
-import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo';
-import { UsersMongoRepo } from '../repository/users.mongo.repo';
-import { ScrubsController } from './scrubs.controller';
+import { Response, Request } from 'express';
+import { User } from '../entities/user.model.js';
+import { CustomRequest } from '../interceptors/logged.js';
+import { ScrubsMongoRepo } from '../repository/scrubs.mongo.repo.js';
+import { UsersMongoRepo } from '../repository/users.mongo.repo.js';
+import { ScrubsController } from './scrubs.controller.js';
 
 describe('Given the scrubsController', () => {
   const mockScrubRepo: ScrubsMongoRepo = {
@@ -21,11 +23,16 @@ describe('Given the scrubsController', () => {
     destroy: jest.fn(),
   };
   const req = {
-    body: {},
+    body: {
+      owner: { email: 'test@email' } as User,
+    },
     params: {
       id: '3',
     },
-  } as unknown as Request;
+    info: {
+      id: 'test',
+    },
+  } as unknown as CustomRequest;
 
   const resp = {
     json: jest.fn(),
@@ -66,11 +73,35 @@ describe('Given the scrubsController', () => {
     });
   });
 
-  describe('When post is called and return data', () => {
+  describe('When post is called with all correct info', () => {
     test('Then it should call resp.json', async () => {
+      (mockUserRepo.queryById as jest.Mock).mockResolvedValue({
+        email: 'test@email',
+        scrubs: [],
+      });
+      (mockScrubRepo.create as jest.Mock).mockResolvedValue({ name: 'test' });
+      (mockUserRepo.update as jest.Mock).mockResolvedValue({
+        email: 'test@email',
+      });
       await controller.post(req, resp, next);
-      expect(mockScrubRepo.create).toHaveBeenCalled();
+
       expect(resp.json).toHaveBeenCalled();
+    });
+  });
+
+  describe('When post is called without info.id', () => {
+    test('Then it should return an error', async () => {
+      const errReq = {} as CustomRequest;
+      (mockUserRepo.queryById as jest.Mock).mockResolvedValue({
+        email: 'test@email',
+      });
+      (mockScrubRepo.create as jest.Mock).mockResolvedValue({});
+      (mockUserRepo.update as jest.Mock).mockResolvedValue({
+        email: 'test@email',
+      });
+
+      await controller.post(errReq, resp, next);
+      expect(next).toHaveBeenCalled();
     });
   });
 

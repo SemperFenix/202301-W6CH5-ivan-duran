@@ -53,7 +53,10 @@ describe('Given the ScrubsMongoRepo', () => {
   describe('When calling the search method (ok)', () => {
     test('Then it should return an array with the results', async () => {
       (ScrubModel.find as jest.Mock).mockResolvedValue([{ email: 'Test' }]);
-      const result = await repo.search([{ key: 'email', value: 'Test' }]);
+      const result = await repo.search([
+        { key: 'email', value: 'Test' },
+        { key: 'test', value: 'test2' },
+      ]);
       expect(result).toEqual([{ email: 'Test' }]);
     });
   });

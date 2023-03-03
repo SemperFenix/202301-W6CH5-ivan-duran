@@ -14,7 +14,7 @@ export const app = express();
 app.disable('x-powered-by');
 debug(_dirname);
 
-app.use(express.static(path.resolve(__dirname, 'public')));
+app.use(express.static(path.resolve(_dirname, 'public')));
 
 app.use(morgan('dev'));
 const corsOrigins = {

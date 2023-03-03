@@ -12,6 +12,7 @@ jest.mock('../config.js', () => ({
 }));
 
 describe('Given the scrubsController', () => {
+  const passwd = '1234';
   const mockRepo = {
     search: jest.fn(),
 
@@ -34,7 +35,7 @@ describe('Given the scrubsController', () => {
     test('Then it should return the created user', async () => {
       req.body = {
         email: 'Test',
-        password: 'testp',
+        password: passwd,
       };
       await controller.register(req, resp, next);
       expect(Auth.hash).toHaveBeenCalled();
@@ -47,7 +48,7 @@ describe('Given the scrubsController', () => {
   describe('When register is called without email or password in the body', () => {
     test('Then it should call next', async () => {
       req.body = {
-        password: '',
+        password: passwd,
       };
       await controller.register(req, resp, next);
 
@@ -60,7 +61,7 @@ describe('Given the scrubsController', () => {
       (Auth.compare as jest.Mock).mockResolvedValue(true);
       req.body = {
         email: 'Test',
-        password: 'test',
+        password: passwd,
       };
 
       (mockRepo.search as jest.Mock).mockResolvedValue([
@@ -77,7 +78,7 @@ describe('Given the scrubsController', () => {
   describe('When login is called without email or password in the body', () => {
     test('Then it should call next', async () => {
       req.body = {
-        password: 'Test',
+        password: passwd,
       };
       (Auth.compare as jest.Mock).mockResolvedValue(true);
       (mockRepo.search as jest.Mock).mockResolvedValue([
@@ -93,7 +94,7 @@ describe('Given the scrubsController', () => {
     test('Then it should call next', async () => {
       req.body = {
         email: 'Test',
-        password: 'Test',
+        password: passwd,
       };
       (mockRepo.search as jest.Mock).mockResolvedValue([]);
 
@@ -106,7 +107,7 @@ describe('Given the scrubsController', () => {
     test('Then it should call next', async () => {
       req.body = {
         email: 'Test',
-        password: 'Test',
+        password: passwd,
       };
 
       (mockRepo.search as jest.Mock).mockResolvedValue(['a']);
